@@ -35,10 +35,10 @@ package
 			add(credits);
 			
 			//buttons
-			var startButton:Button = new Button(100, 100);
-			startButton.createGraphic("Start");
-			startButton.onClick(newGame);
-			add(startButton);
+			//var startButton:Button = new Button(100, 100);
+			//startButton.createGraphic("Start");
+			//startButton.onClick(newGame);
+			//add(startButton);
 			
 			//fire some balls around
 			//var balls:Array = new Array();

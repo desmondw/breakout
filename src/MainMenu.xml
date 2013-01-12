@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu>
+	<button>
+		<text size="70" font="opificio">breakout</text>
+		<origin x="5" y="0"/>
+	</button>
+	<button>
+		<text size="35" font="opificio">continue</text>
+	</button>
+</menu>

@@ -10,15 +10,21 @@ package gui
 		public static const DEFAULT_HEIGHT:int = 45;
 		public static const DEFAULT_BORDER:int = 5;
 		
-		private var downEvent:Function;
-		private var hoverEvent:Function;
-		private var upEvent:Function;
+		private var downEvent:Function; //mouse pressed down
+		private var upEvent:Function; //mouse released
+		private var hoverEvent:Function; //mouse moves over button
+		private var strayEvent:Function; //mouse leaves button
 		
 		private var normalGraphic:Graphic;
 		private var hoverGraphic:Graphic;
 		private var downGraphic:Graphic;
 		
 		private var text:Text;
+		private var mouseHovering:Boolean = false;
+		
+		//properties
+		public function get buttonText():Text{ return text; }
+		
 		
 		public function Button(x:int=0, y:int=0) 
 		{
@@ -26,6 +32,7 @@ package gui
 			this.y = y;
 			type = "button";
 			createGraphic();
+			text = new Text("");
 		}
 		
 		override public function update():void 
@@ -33,9 +40,19 @@ package gui
 			if (collidePoint(x, y, Input.mouseX, Input.mouseY)) //if mouse over button
 			{
 				if (Input.mousePressed && downEvent != null)
-					downEvent();
+					downEvent(this);
 				if (Input.mouseReleased && upEvent != null)
-					upEvent();
+					upEvent(this);
+				if (!mouseHovering && hoverEvent != null) //if mouse isn't already hovering (dont run twice)
+				{
+					hoverEvent(this);
+					mouseHovering = true;
+				}
+			}
+			else if (mouseHovering && strayEvent != null) //mouse just left button
+			{
+				strayEvent(this);
+				mouseHovering = false;
 			}
 		}
 		
@@ -67,14 +84,19 @@ package gui
 			downEvent = callback;
 		}
 		
+		public function onRelease(callback:Function):void 
+		{
+			upEvent = callback;
+		}
+		
 		public function onMouseOver(callback:Function):void 
 		{
 			hoverEvent = callback;
 		}
 		
-		public function onRelease(callback:Function):void 
+		public function onMouseStray(callback:Function):void 
 		{
-			upEvent = callback;
+			strayEvent = callback;
 		}
 		//}
 		
@@ -122,13 +144,7 @@ package gui
 		
 		public function setTextSize(size:int):void 
 		{
-			if (text == null)
-				text = new Text("");
-			
-			text.size = size;
-			setHitbox(this.text.width, this.text.height);
-			graphic = text;
-			normalGraphic = graphic;
+			createText(text.text, size, text.font);
 		}
 		//}
 	}

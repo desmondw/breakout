@@ -20,11 +20,11 @@ package
 			
 			continueBtn = new Button(x + (width - Button.DEFAULT_WIDTH) / 2, y + 50);
 			continueBtn.createGraphic("continue");
-			continueBtn.onClick(unpause);
+			continueBtn.onClick(continueBtn_onClick);
 			
 			mainMenuBtn = new Button(x + (width - Button.DEFAULT_WIDTH) / 2, y + 100);
 			mainMenuBtn.createGraphic("main menu");
-			mainMenuBtn.onClick(exitToMainMenu);
+			mainMenuBtn.onClick(mainMenuBtn_onClick);
 			
 			//define input
 			Input.define("pause", Key.ESCAPE, Key.P);
@@ -52,15 +52,20 @@ package
 			mainMenuBtn.update();
 		}
 		
+		private function continueBtn_onClick(b:Button):void 
+		{
+			unpause();
+		}
+		
+		private function mainMenuBtn_onClick(b:Button):void 
+		{
+			FP.world = new Menu();
+		}
+		
 		private function unpause():void 
 		{
 				world.remove(this);
 				Game.paused = false;
-		}
-		
-		private function exitToMainMenu():void 
-		{
-			FP.world = new Menu();
 		}
 	}
 }

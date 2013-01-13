@@ -6,7 +6,6 @@ package
 	
 	public class Main extends Engine
 	{
-		public static var con:Console = new Console(); //debug console
 		public static var artOn:Boolean = true;
 		
 		public function Main()
@@ -17,15 +16,13 @@ package
 
 		override public function init():void
 		{
-			//con.enable();
-			
+			//FP.console.enable();
 			FP.screen.color = 0x7777FF;
 		}
 		
 		override public function update():void 
 		{
 			super.update();
-			con.update();
 		}
 	}
 }

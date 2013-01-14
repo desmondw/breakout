@@ -22,60 +22,59 @@ package
 		{
 			this.x = x;
 			this.y = y;
-			if (Main.artOn)
-				graphic = new Image(Resources.BALL);
-			else
-				graphic = Image.createRect(SIZE, SIZE);
+			graphic = new Image(Resources.BALL);
 			setHitbox(SIZE, SIZE);
 			type = "ball";
 		}
 		
 		override public function update():void 
 		{
-			//test case
-			if (Input.released(Key.SHIFT))
-			{
-				x = FP.width - 100;
-				y = FP.height - 100;
-				velX = 20;
-				velY = -calcYVelocity();
-			}
+			//TEST CASE
+			//if (Input.pressed(Key.Q))
+			//{
+				//x = 1;
+				//y = 200;
+				//velX = -55;
+				//velY = calcYVelocity();
+			//}
 			
 			movementAndCollision();
 		}
 		
 		private function movementAndCollision():void 
 		{
-			var newX:int = x + velX * FP.elapsed;
-			var newY:int = y + velY * FP.elapsed;
-			var newXFloat:Number = x + Math.ceil(velX * FP.elapsed);
-			var newYFloat:Number = y + Math.ceil(velY * FP.elapsed);
+			var newX:Number = x + velX * FP.elapsed;
+			var newY:Number = y + velY * FP.elapsed;
 			
 			//{game walls collision
-			if (newYFloat < 0) //top
+			if (newY < 0) //top
 			{
 				newY = 0;
-				velY = -velY;
+				//velY = -velY;
+				bounce(false, true);
 			}
-			if (newYFloat + height > FP.height) //bot
+			if (newY + height > FP.height) //bot
 			{
 				if (bounceOffBottom)
 				{
 					newY = FP.height - height;
-					velY = -velY;
+					//velY = -velY;
+				bounce(false, true);
 				}
 				else
 					destroy();
 			}
-			if (newXFloat < 0) //left
+			if (newX < 0) //left
 			{
 				newX = 0;
-				velX = -velX;
+				//velX = -velX;
+				bounce(true, false);
 			}
-			if (newXFloat + width > FP.width) //right
+			if (newX + width > FP.width) //right
 			{
 				newX = FP.width - width;
-				velX = -velX;
+				//velX = -velX;
+				bounce(true, false);
 			}
 			//}
 			
@@ -172,6 +171,51 @@ package
 		{
 			velX = FP.sign(FP.random - .5) * Util.rand(MIN_AXIS_SPEED, MAX_AXIS_SPEED); //MIN_ANGLE
 			velY = FP.sign(FP.random - .5) * calcYVelocity();
+		}
+		
+		//bouncing off of non-moving object
+		public function bounce(collisionX:Boolean, collisionY:Boolean):void
+		{
+			var newVelocities:Array;
+			
+			if (collisionX && collisionY)
+			{
+				velX = -velX;
+				velY = -velY;
+			}
+			else if (collisionX)
+			{
+				newVelocities = calculateBounceVelocities(velX, velY);
+				velX = -FP.sign(velX) * newVelocities[0];
+				velY = FP.sign(velY) * newVelocities[1];
+			}
+			else if (collisionY)
+			{
+				newVelocities = calculateBounceVelocities(velY, velX);
+				velY = -FP.sign(velY) * newVelocities[0];
+				velX = FP.sign(velX) * newVelocities[1];
+			}
+			else
+				return; //no collision
+			
+		}
+		
+		//takes in axis velocities and returns array of new axis velocities
+		private function calculateBounceVelocities(velOpposite:Number, velAdjacent:Number):Array 
+		{
+			//calculate angle of departure with angle of entry
+			var oldAngle:Number = Math.atan(velOpposite / velAdjacent);
+			var newAngle:Number = (Math.PI) - Math.abs(oldAngle);
+			
+			//calculate velocity with old axis velocities
+			var velocity:Number = Math.sqrt(Math.pow(velOpposite, 2) + Math.pow(velAdjacent, 2));
+			
+			//calculate axis velocities with new angle and velocity
+			var axisVelocities:Array = new Array(2);
+			axisVelocities[0] = Math.abs(Math.sin(newAngle) * velocity);
+			axisVelocities[1] = Math.abs(Math.cos(newAngle) * velocity);
+			
+			return axisVelocities;
 		}
 		
 		//special handling for player control over ball

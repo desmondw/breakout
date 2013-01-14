@@ -21,6 +21,7 @@ package gui
 		
 		private var text:Text;
 		private var mouseHovering:Boolean = false;
+		public var interactable:Boolean = true;
 		
 		//properties
 		public function get buttonText():Text{ return text; }
@@ -37,19 +38,19 @@ package gui
 		
 		override public function update():void 
 		{
-			if (collidePoint(x, y, Input.mouseX, Input.mouseY)) //if mouse over button
+			if (interactable && collidePoint(x, y, Input.mouseX, Input.mouseY)) //if mouse over button
 			{
-				if (Input.mousePressed && downEvent != null)
+				if (Input.mousePressed && downEvent)
 					downEvent(this);
-				if (Input.mouseReleased && upEvent != null)
+				if (Input.mouseReleased && upEvent)
 					upEvent(this);
-				if (!mouseHovering && hoverEvent != null) //if mouse isn't already hovering (dont run twice)
+				if (!mouseHovering && hoverEvent) //if mouse isn't already hovering (dont run twice)
 				{
 					hoverEvent(this);
 					mouseHovering = true;
 				}
 			}
-			else if (mouseHovering && strayEvent != null) //mouse just left button
+			else if (interactable && mouseHovering && strayEvent) //mouse just left button
 			{
 				strayEvent(this);
 				mouseHovering = false;
@@ -99,6 +100,12 @@ package gui
 			strayEvent = callback;
 		}
 		//}
+		
+		public function mouseStray():void 
+		{
+			if (strayEvent)
+				strayEvent(this);
+		}
 		
 		//{ generate graphics
 		//generate button

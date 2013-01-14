@@ -11,6 +11,7 @@ package
 		private const SIZE_Y:int = 20;
 		private const MAX_SPEED:Number = 400;
 		private const ACCELERATION:Number = 30;
+		private const TURN_AROUND_MOD:Number = 2.1;
 		
 		//vars
 		private var autopilot:Boolean = false;
@@ -24,13 +25,10 @@ package
 		public function Paddle() 
 		{
 			//graphic / hitbox
-			if (Main.artOn)
-				graphic = new Image(Resources.PADDLE);
-			else
-				graphic = Image.createRect(SIZE_X, SIZE_Y);
+			graphic = new Image(Resources.PADDLE);
 			setHitbox(SIZE_X, SIZE_Y);
 			x = FP.halfWidth - SIZE_X/2;
-			y = FP.height - SIZE_Y - 10;
+			y = FP.height - SIZE_Y - 20;
 			type = "paddle";
 			
 			//define movement keys
@@ -40,7 +38,7 @@ package
 		
 		override public function update():void 
 		{
-			acceleration = -FP.sign(velocity) * ACCELERATION; //accelerate opposite of velocity
+			acceleration = -FP.sign(velocity) * ACCELERATION; //accelerate opposite of velocity when not moving
 				
 			input();
 			movement();
@@ -64,10 +62,12 @@ package
 		
 		private function movement():void 
 		{
-			if (FP.sign(velocity) == -FP.sign(velocity + acceleration))
-				velocity = 0; //if slowing to a stop, stop
+			if (Math.abs(velocity + acceleration) < acceleration) //if slowing to a stop, stop (prevents skidding forever)
+				velocity = 0;
+			else if (FP.sign(velocity) == -FP.sign(acceleration)) //if turning around, do it faster
+				velocity += acceleration * TURN_AROUND_MOD;
 			else
-				velocity += acceleration; //add accel to velocity
+				velocity += acceleration; //add accel to velocity normally
 			
 			//keep velocity within limits
 			if (velocity > MAX_SPEED)

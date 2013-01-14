@@ -11,10 +11,7 @@ package
 		public function Brick(x:int, y:int, color:uint) 
 		{
 			var img:Image;
-			if (Main.artOn)
-				img = new Image(Resources.BRICK);
-			else
-				img = Image.createRect(SIZE_X, SIZE_Y);
+			img = new Image(Resources.BRICK);
 			
 			if (color)
 				img.color = color;

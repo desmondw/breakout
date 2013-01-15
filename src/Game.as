@@ -75,24 +75,21 @@ package
 			var iconsY:Number = FP.height - ICON_SIZE - ICON_BORDER_SPACING;
 			
 			//sound
-			soundBtn = new Button(iconsX, iconsY);
 			if (Main.soundOn)
-				soundBtn.setGraphic(new Image(Resources.ICON_SOUND_ON), ICON_SIZE, ICON_SIZE);
+				soundBtn = new Button(new Image(Resources.ICON_SOUND_ON), iconsX, iconsY, ICON_SIZE, ICON_SIZE);
 			else
-				soundBtn.setGraphic(new Image(Resources.ICON_SOUND_OFF), ICON_SIZE, ICON_SIZE);
+				soundBtn = new Button(new Image(Resources.ICON_SOUND_OFF), iconsX, iconsY, ICON_SIZE, ICON_SIZE);
 			soundBtn.onClick(soundBtn_onClick);
 			
 			//music
-			musicBtn = new Button(iconsX + ICON_SIZE + ICON_SPACING, iconsY);
 			if (Main.musicOn)
-				musicBtn.setGraphic(new Image(Resources.ICON_MUSIC_ON), ICON_SIZE, ICON_SIZE);
+				musicBtn = new Button(new Image(Resources.ICON_MUSIC_ON), iconsX + ICON_SIZE + ICON_SPACING, iconsY, ICON_SIZE, ICON_SIZE);
 			else
-				musicBtn.setGraphic(new Image(Resources.ICON_MUSIC_OFF), ICON_SIZE, ICON_SIZE);
+				musicBtn = new Button(new Image(Resources.ICON_MUSIC_OFF), iconsX + ICON_SIZE + ICON_SPACING, iconsY, ICON_SIZE, ICON_SIZE);
 			musicBtn.onClick(musicBtn_onClick);
 			
 			//pause
-			pauseBtn = new Button(iconsX + (ICON_SIZE + ICON_SPACING)*2, iconsY);
-			pauseBtn.setGraphic(new Image(Resources.ICON_PAUSE), ICON_SIZE, ICON_SIZE);
+			pauseBtn = new Button(new Image(Resources.ICON_PAUSE), iconsX + (ICON_SIZE + ICON_SPACING)*2, iconsY, ICON_SIZE, ICON_SIZE);
 			pauseBtn.onClick(pauseBtn_onClick);
 			
 			//}

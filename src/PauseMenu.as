@@ -7,9 +7,9 @@ package
 
 	public class PauseMenu extends Entity
 	{
-		public var titleBtn:Button;
-		public var continueBtn:Button;
-		public var mainMenuBtn:Button;
+		public var titleBtn:TextButton;
+		public var continueBtn:TextButton;
+		public var mainMenuBtn:TextButton;
 		
 		public var fade:Fader = new Fader();
 		
@@ -21,20 +21,17 @@ package
 			graphic = img;
 			setHitbox(img.width, img.height);
 			
-			titleBtn = new Button(x + (width - Button.DEFAULT_WIDTH) / 2, y + 20);
+			titleBtn = new TextButton(x + (width - 80) / 2, y + 20, "breakout", 50, Resources.FONT, 0x777777);
 			titleBtn.x = x + width / 2 - titleBtn.width / 2 - 60;
-			titleBtn.createText("breakout", 50, Resources.FONT, 0x777777);
 			titleBtn.adjustHitbox();
 			
-			continueBtn = new Button(x + (width - Button.DEFAULT_WIDTH) / 2, y + 105);
+			continueBtn = new TextButton(x + (width - 80) / 2, y + 105, "continue", 30, Resources.FONT, 0x999999);
 			continueBtn.x = x + width / 2 - continueBtn.width / 2 - 20;
-			continueBtn.createText("continue", 30, Resources.FONT, 0x999999);
 			continueBtn.onClick(continueBtn_onClick);
 			continueBtn.adjustHitbox();
 			
-			mainMenuBtn = new Button(x + (width - Button.DEFAULT_WIDTH) / 2, y + 155);
+			mainMenuBtn = new TextButton(x + (width - 80) / 2, y + 155, "main menu", 30, Resources.FONT, 0xBBBBBB);
 			mainMenuBtn.x = x + width / 2 - mainMenuBtn.width / 2 - 40;
-			mainMenuBtn.createText("main menu", 30, Resources.FONT, 0xBBBBBB);
 			mainMenuBtn.onClick(mainMenuBtn_onClick);
 			mainMenuBtn.adjustHitbox();
 			

@@ -46,35 +46,32 @@ package
 			//}
 			
 			//{ MAIN
-			var button:Button;
+			
+			var button:TextButton;
+			
 			//title
-			button = new Button(10, 7);
-			button.createText("breakout", 70, Resources.FONT);
+			button = new TextButton(10, 7, "breakout", 70, Resources.FONT);
 			button.adjustHitbox();
 			add(button);
 			mainList.push(button);
 			
 			//continue
-			button = new Button(LIST_X, LIST_Y);
-			button.createText("play", 30, Resources.FONT);
+			button = new TextButton(LIST_X, LIST_Y, "play", 30, Resources.FONT);
 			button.onClick(continueBtn_onClick);
 			mainList.push(button);
 			
 			//levels
-			//button = new Button(LIST_X, LIST_Y + BUTTON_SPACING);
-			//button.createText("levels", 30, Resources.FONT);
+			//button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, "levels", 30, Resources.FONT);
 			//button.onClick(levelsBtn_onClick);
 			//mainList.push(button);
 			
 			//options
-			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 1);
-			button.createText("options", 30, Resources.FONT);
+			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 1, "options", 30, Resources.FONT);
 			button.onClick(optionsBtn_onClick);
 			mainList.push(button);
 			
 			//credits
-			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
-			button.createText("credits", 30, Resources.FONT);
+			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, "credits", 30, Resources.FONT);
 			button.onClick(creditsBtn_onClick);
 			mainList.push(button);
 			
@@ -86,33 +83,29 @@ package
 				mainList[i].adjustHitbox();
 				add(mainList[i]);
 			}
+			
 			//}
 			
 			//{ LEVELS
 			//title
-			levelsList[0] = new Button(10, 7);
-			levelsList[0].createText("levels", 70, Resources.FONT);
+			levelsList[0] = new TextButton(10, 7, "levels", 70, Resources.FONT);
 			levelsList[0].adjustHitbox();
 			add(levelsList[0]);
 			
 			//1
-			levelsList[1] = new Button(LIST_X, LIST_Y);
-			levelsList[1].createText(levels[0], 30, Resources.FONT);
+			levelsList[1] = new TextButton(LIST_X, LIST_Y, levels[0], 30, Resources.FONT);
 			levelsList[1].onClick(levelList_onClick);
 			
 			//2
-			levelsList[2] = new Button(LIST_X, LIST_Y + BUTTON_SPACING);
-			levelsList[2].createText(levels[1], 30, Resources.FONT);
+			levelsList[2] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, levels[1], 30, Resources.FONT);
 			levelsList[2].onClick(levelList_onClick);
 			
 			//3
-			levelsList[3] = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
-			levelsList[3].createText(levels[2], 30, Resources.FONT);
+			levelsList[3] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, levels[2], 30, Resources.FONT);
 			levelsList[3].onClick(levelList_onClick);
 			
 			//back
-			levelsList[4] = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 3);
-			levelsList[4].createText("back", 30, Resources.FONT);
+			levelsList[4] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 3, "back", 30, Resources.FONT);
 			levelsList[4].onClick(levelList_onClick);
 			
 			//add graphics for mousing over and add to world
@@ -128,33 +121,29 @@ package
 			//{ OPTIONS
 			
 			//title
-			button = new Button(10, 7);
-			button.createText("options", 70, Resources.FONT);
+			button = new TextButton(10, 7, "options", 70, Resources.FONT);
 			button.adjustHitbox();
 			add(button);
 			optionsList.push(button);
 			
 			//sound
-			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 0);
 			if (Main.soundOn)
-				button.createText("sound: on", 30, Resources.FONT);
+				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 0, "sound: on", 30, Resources.FONT);
 			else
-				button.createText("sound: off", 30, Resources.FONT);
+				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 0, "sound: off", 30, Resources.FONT);
 			button.onClick(soundBtn_onClick);
 			optionsList.push(button);
 			
 			//music
-			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 1);
 			if (Main.musicOn)
-				button.createText("music: on", 30, Resources.FONT);
+				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 1, "music: on", 30, Resources.FONT);
 			else
-				button.createText("music: off", 30, Resources.FONT);
+				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 1, "music: off", 30, Resources.FONT);
 			button.onClick(musicBtn_onClick);
 			optionsList.push(button);
 			
 			//back
-			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
-			button.createText("back", 30, Resources.FONT);
+			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, "back", 30, Resources.FONT);
 			button.onClick(backBtn_onClick);
 			optionsList.push(button);
 			
@@ -223,7 +212,7 @@ package
 				else
 				{
 					button.visible = false;
-					button.mouseStray();
+					button.forceStray();
 					button.interactable = false;
 				}
 			}
@@ -237,7 +226,7 @@ package
 				else
 				{
 					button.visible = false;
-					button.mouseStray();
+					button.forceStray();
 					button.interactable = false;
 				}
 			}
@@ -251,7 +240,7 @@ package
 				else
 				{
 					button.visible = false;
-					button.mouseStray();
+					button.forceStray();
 					button.interactable = false;
 				}
 			}
@@ -264,30 +253,30 @@ package
 		}
 		
 		//{ event handlers
-		private function continueBtn_onClick(b:Button):void 
+		private function continueBtn_onClick(b:TextButton):void 
 		{
 			fade.fadeOut(.5, newGame);
 		}
 		
-		private function levelsBtn_onClick(b:Button):void 
+		private function levelsBtn_onClick(b:TextButton):void 
 		{
 			showList("levels");
 		}
 		
-		private function optionsBtn_onClick(b:Button):void 
+		private function optionsBtn_onClick(b:TextButton):void 
 		{
 			showList("options");
 		}
 		
-		private function creditsBtn_onClick(b:Button):void 
+		private function creditsBtn_onClick(b:TextButton):void 
 		{
 			
 		}
 		
 		//any level is clicked
-		private function levelList_onClick(b:Button):void 
+		private function levelList_onClick(b:TextButton):void 
 		{
-			switch (b.buttonText.text)
+			switch (b.text)
 			{
 				case levels[0]:
 					//newGame();
@@ -307,41 +296,41 @@ package
 			}
 		}
 		
-		private function backBtn_onClick(b:Button):void 
+		private function backBtn_onClick(b:TextButton):void 
 		{
 			back();
 		}
 		
-		private function soundBtn_onClick(b:Button):void 
+		private function soundBtn_onClick(b:TextButton):void 
 		{
 			if (Main.soundOn)
 			{
 				Main.soundOn = false;
-				b.buttonText.text = "sound: off";
+				b.text = "sound: off";
 			}
 			else
 			{
 				Main.soundOn = true;
-				b.buttonText.text = "sound: on";
+				b.text = "sound: on";
 			}
 		}
 		
-		private function musicBtn_onClick(b:Button):void 
+		private function musicBtn_onClick(b:TextButton):void 
 		{
 			if (Main.musicOn)
 			{
 				Main.musicOn = false;
-				b.buttonText.text = "music: off";
+				b.text = "music: off";
 			}
 			else
 			{
 				Main.musicOn = true;
-				b.buttonText.text = "music: on";
+				b.text = "music: on";
 			}
 		}
 		
 		//any button is moused over
-		private function buttonMouseOver(b:Button):void 
+		private function buttonMouseOver(b:TextButton):void 
 		{
 			var oldCenterY:int = b.centerY;
 			b.setTextSize(BUTTON_SIZE_SELECTED);
@@ -350,7 +339,7 @@ package
 		}
 		
 		//any button when cursor leaves
-		private function buttonMouseStray(b:Button):void 
+		private function buttonMouseStray(b:TextButton):void 
 		{
 			var oldCenterY:int = b.centerY;
 			b.setTextSize(BUTTON_SIZE);

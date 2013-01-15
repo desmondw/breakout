@@ -138,11 +138,12 @@ package gui
 		}
 		
 		//generate text only
-		public function createText(text:String, size:int=12, font:String="default"):void 
+		public function createText(text:String, size:int=12, font:String="default", color:uint=0xFFFFFF):void 
 		{
 			this.text = new Text(text);
 			this.text.size = size;
 			this.text.font = font;
+			this.text.color = color
 			
 			setHitbox(this.text.width, this.text.height);
 			graphic = this.text;
@@ -154,5 +155,12 @@ package gui
 			createText(text.text, size, text.font);
 		}
 		//}
+		
+		public function adjustHitbox():void 
+		{
+			graphic.y -= height * (1 - .8) / 2;
+			width *= .84;
+			height *= .78;
+		}
 	}
 }

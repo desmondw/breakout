@@ -1,6 +1,6 @@
 package  
 {
-	import gui.Button;
+	import gui.*;
 	import net.flashpunk.*;
 	import net.flashpunk.utils.*;
 	import net.flashpunk.graphics.*;
@@ -8,12 +8,13 @@ package
 	public class Game extends World
 	{
 		//constants
-		private const BRICK_SPACING:int = 2;
 		private const STARTING_LIVES:int = 2;
 		
 		//vars
 		private var ballFired:Boolean = false;
 		public static var paused:Boolean;
+		private var oldMouseX:Number;
+		private var oldMouseY:Number;
 		
 		//entities
 		public static var paddle:Paddle;
@@ -75,12 +76,18 @@ package
 			
 			//sound
 			soundBtn = new Button(iconsX, iconsY);
-			soundBtn.setGraphic(new Image(Resources.ICON_SOUND_ON), ICON_SIZE, ICON_SIZE);
+			if (Main.soundOn)
+				soundBtn.setGraphic(new Image(Resources.ICON_SOUND_ON), ICON_SIZE, ICON_SIZE);
+			else
+				soundBtn.setGraphic(new Image(Resources.ICON_SOUND_OFF), ICON_SIZE, ICON_SIZE);
 			soundBtn.onClick(soundBtn_onClick);
 			
 			//music
 			musicBtn = new Button(iconsX + ICON_SIZE + ICON_SPACING, iconsY);
-			musicBtn.setGraphic(new Image(Resources.ICON_MUSIC_ON), ICON_SIZE, ICON_SIZE);
+			if (Main.musicOn)
+				musicBtn.setGraphic(new Image(Resources.ICON_MUSIC_ON), ICON_SIZE, ICON_SIZE);
+			else
+				musicBtn.setGraphic(new Image(Resources.ICON_MUSIC_OFF), ICON_SIZE, ICON_SIZE);
 			musicBtn.onClick(musicBtn_onClick);
 			
 			//pause
@@ -119,15 +126,17 @@ package
 		
 		private function addBricks():void 
 		{
-			var brickOffset:int = (FP.width - (7 * (Brick.SIZE_X + BRICK_SPACING) - BRICK_SPACING)) / 2;
+			var brickSpacing:int = 15;
+			var brickOffsetX:int = (FP.width - (5 * (Brick.SIZE_X + brickSpacing) - brickSpacing)) / 2;
+			var brickOffsetY:int = 40;
 			
 			//create bricks 7x5 with 5 pixels inbetween
-			for (var i:int = 0; i < 7; i++)
+			for (var i:int = 0; i < 5; i++)
 			{
-				for (var j:int = 0; j < 5; j++)
+				for (var j:int = 0; j < 4; j++)
 				{
-					var brickX:int = i * (Brick.SIZE_X + BRICK_SPACING) + brickOffset;
-					var brickY:int = j * (Brick.SIZE_Y + BRICK_SPACING) + brickOffset;
+					var brickX:int = i * (Brick.SIZE_X + brickSpacing) + brickOffsetX;
+					var brickY:int = j * (Brick.SIZE_Y + brickSpacing) + brickOffsetY;
 					var color:uint;
 					
 					switch(j)
@@ -173,7 +182,7 @@ package
 			
 			//move ball with paddle
 			if (!ballFired)
-				ball.hoverOverPaddle();
+				ball.patrolPaddle();
 			
 			checkHandleNoBalls();
 			checkHandleNoBricks();
@@ -199,7 +208,7 @@ package
 				//paddle.toggleAutopilot();
 				
 			//firing ball from paddle
-			if (!ballFired && Input.pressed("fire"))
+			if (!ballFired && (Input.pressed("fire")))// || (Input.mousePressed && !collidePoint("button", Input.mouseX, Input.mouseY)))) //if fire key pressed, or mouse clicked when not over a button
 			{
 				ballFired = true;
 				ball.fireFromPaddle();

@@ -46,38 +46,44 @@ package
 			//}
 			
 			//{ MAIN
+			var button:Button;
 			//title
-			mainList[0] = new Button(10, 7);
-			mainList[0].createText("breakout", 70, Resources.FONT);
-			adjustHitbox(mainList[0]);
-			add(mainList[0]);
+			button = new Button(10, 7);
+			button.createText("breakout", 70, Resources.FONT);
+			button.adjustHitbox();
+			add(button);
+			mainList.push(button);
 			
 			//continue
-			mainList[1] = new Button(LIST_X, LIST_Y);
-			mainList[1].createText("continue", 30, Resources.FONT);
-			mainList[1].onClick(continueBtn_onClick);
+			button = new Button(LIST_X, LIST_Y);
+			button.createText("play", 30, Resources.FONT);
+			button.onClick(continueBtn_onClick);
+			mainList.push(button);
 			
 			//levels
-			mainList[2] = new Button(LIST_X, LIST_Y + BUTTON_SPACING);
-			mainList[2].createText("levels", 30, Resources.FONT);
-			mainList[2].onClick(levelsBtn_onClick);
+			//button = new Button(LIST_X, LIST_Y + BUTTON_SPACING);
+			//button.createText("levels", 30, Resources.FONT);
+			//button.onClick(levelsBtn_onClick);
+			//mainList.push(button);
 			
 			//options
-			mainList[3] = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
-			mainList[3].createText("options", 30, Resources.FONT);
-			mainList[3].onClick(optionsBtn_onClick);
+			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 1);
+			button.createText("options", 30, Resources.FONT);
+			button.onClick(optionsBtn_onClick);
+			mainList.push(button);
 			
 			//credits
-			mainList[4] = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 3);
-			mainList[4].createText("credits", 30, Resources.FONT);
-			mainList[4].onClick(creditsBtn_onClick);
+			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
+			button.createText("credits", 30, Resources.FONT);
+			button.onClick(creditsBtn_onClick);
+			mainList.push(button);
 			
 			//add graphics for mousing over and add to world
 			for (var i:int = 1; i < mainList.length; i++)
 			{
 				mainList[i].onMouseOver(buttonMouseOver);
 				mainList[i].onMouseStray(buttonMouseStray);
-				adjustHitbox(mainList[i]);
+				mainList[i].adjustHitbox();
 				add(mainList[i]);
 			}
 			//}
@@ -86,7 +92,7 @@ package
 			//title
 			levelsList[0] = new Button(10, 7);
 			levelsList[0].createText("levels", 70, Resources.FONT);
-			adjustHitbox(levelsList[0]);
+			levelsList[0].adjustHitbox();
 			add(levelsList[0]);
 			
 			//1
@@ -114,8 +120,51 @@ package
 			{
 				levelsList[i].onMouseOver(buttonMouseOver);
 				levelsList[i].onMouseStray(buttonMouseStray);
-				adjustHitbox(levelsList[i]);
+				levelsList[i].adjustHitbox();
 				add(levelsList[i]);
+			}
+			//}
+			
+			//{ OPTIONS
+			
+			//title
+			button = new Button(10, 7);
+			button.createText("options", 70, Resources.FONT);
+			button.adjustHitbox();
+			add(button);
+			optionsList.push(button);
+			
+			//sound
+			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 0);
+			if (Main.soundOn)
+				button.createText("sound: on", 30, Resources.FONT);
+			else
+				button.createText("sound: off", 30, Resources.FONT);
+			button.onClick(soundBtn_onClick);
+			optionsList.push(button);
+			
+			//music
+			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 1);
+			if (Main.musicOn)
+				button.createText("music: on", 30, Resources.FONT);
+			else
+				button.createText("music: off", 30, Resources.FONT);
+			button.onClick(musicBtn_onClick);
+			optionsList.push(button);
+			
+			//back
+			button = new Button(LIST_X, LIST_Y + BUTTON_SPACING * 2);
+			button.createText("back", 30, Resources.FONT);
+			button.onClick(backBtn_onClick);
+			optionsList.push(button);
+			
+			//add graphics for mousing over and add to world
+			for (var i:int = 1; i < optionsList.length; i++)
+			{
+				optionsList[i].onMouseOver(buttonMouseOver);
+				optionsList[i].onMouseStray(buttonMouseStray);
+				optionsList[i].adjustHitbox();
+				add(optionsList[i]);
 			}
 			//}
 			
@@ -154,12 +203,12 @@ package
 		}
 		
 		//alter text boxes to have appropriate hitboxes
-		private function adjustHitbox(button:Button):void 
-		{
-			button.graphic.y -= button.height * (1 - .8) / 2;
-			button.width *= .84;
-			button.height *= .78;
-		}
+		//private function adjustHitbox(button:Button):void 
+		//{
+			//button.graphic.y -= button.height * (1 - .8) / 2;
+			//button.width *= .84;
+			//button.height *= .78;
+		//}
 		
 		//changes visible list
 		private function showList(list:String):void 
@@ -227,7 +276,7 @@ package
 		
 		private function optionsBtn_onClick(b:Button):void 
 		{
-			
+			showList("options");
 		}
 		
 		private function creditsBtn_onClick(b:Button):void 
@@ -258,12 +307,45 @@ package
 			}
 		}
 		
+		private function backBtn_onClick(b:Button):void 
+		{
+			back();
+		}
+		
+		private function soundBtn_onClick(b:Button):void 
+		{
+			if (Main.soundOn)
+			{
+				Main.soundOn = false;
+				b.buttonText.text = "sound: off";
+			}
+			else
+			{
+				Main.soundOn = true;
+				b.buttonText.text = "sound: on";
+			}
+		}
+		
+		private function musicBtn_onClick(b:Button):void 
+		{
+			if (Main.musicOn)
+			{
+				Main.musicOn = false;
+				b.buttonText.text = "music: off";
+			}
+			else
+			{
+				Main.musicOn = true;
+				b.buttonText.text = "music: on";
+			}
+		}
+		
 		//any button is moused over
 		private function buttonMouseOver(b:Button):void 
 		{
 			var oldCenterY:int = b.centerY;
 			b.setTextSize(BUTTON_SIZE_SELECTED);
-			adjustHitbox(b);
+			b.adjustHitbox();
 			b.y += oldCenterY - b.centerY;
 		}
 		
@@ -272,7 +354,7 @@ package
 		{
 			var oldCenterY:int = b.centerY;
 			b.setTextSize(BUTTON_SIZE);
-			adjustHitbox(b);
+			b.adjustHitbox();
 			b.y += oldCenterY - b.centerY;
 		}
 		//}

@@ -5,10 +5,10 @@ package
 
 	public class Brick extends Entity
 	{
-		public static const SIZE_X:int = 90;
+		public static const SIZE_X:int = 80;
 		public static const SIZE_Y:int = 20;
 		
-		public function Brick(x:int, y:int, color:uint) 
+		public function Brick(x:int, y:int, color:uint=0xFFFFFF) 
 		{
 			var img:Image;
 			img = new Image(Resources.BRICK);

@@ -12,10 +12,14 @@ package
 		private const MIN_ANGLE:Number = .15; //minimum angle the ball can travel to an axis
 		private const MAX_AXIS_SPEED:Number = SPEED * (1 - MIN_ANGLE); //max speed on one axis
 		private const MIN_AXIS_SPEED:Number = SPEED * MIN_ANGLE; //min speed on one axis
+		private const HOVER_SPEED:Number = 80;
 		
 		//vars
 		public var velX:Number = 0;
 		public var velY:Number = 0;
+		public var hoverVel:Number = 0;
+		public var hoverOffset:Number = 0;
+		public var hoveringRight:Boolean = true;
 		public var bounceOffBottom:Boolean = false;
 		
 		public function Ball(x:int=0, y:int=0) 
@@ -83,7 +87,7 @@ package
 				paddleBounce();
 				
 			//{ other collision
-			var entity:Entity = collideTypes(["button", "ball", "menu", "brick"], newX, newY);
+			var entity:Entity = collideTypes(["ball", "menu", "brick"], newX, newY);
 			var velModX:int = 1;
 			var velModY:int = 1;
 			
@@ -97,8 +101,7 @@ package
 					else //is right of
 						newX = entity.right + 1;
 						
-					//flip velocity
-					velModX = -1;
+					bounce(true, false);
 				}
 				else if (!collideWith(entity, newX, y) && collideWith(entity, x, newY)) //vertical only
 				{
@@ -108,8 +111,7 @@ package
 					else //is bottom of
 						newY = entity.bottom + 1;
 						
-					//flip velocity
-					velModY = -1
+					bounce(false, true);
 				}
 				else //horizontal and vertical collision
 				{
@@ -124,9 +126,7 @@ package
 					else //is bottom of
 						newY = entity.bottom + 1;
 						
-					//flip velocity
-					velModX = -1;
-					velModY = -1
+					bounce(true, true);
 				}
 				
 				//BRICKS MUST DIE
@@ -136,11 +136,6 @@ package
 				//grab new colliding entity
 				entity = collideTypes(["button", "ball", "menu", "brick"], newX, newY);
 			}
-			
-			//flip velocity as needed
-			velX *= velModX;
-			velY *= velModY;
-			
 			//}
 				
 			//update position
@@ -151,6 +146,36 @@ package
 		public function hoverOverPaddle():void 
 		{
 			x = Game.paddle.centerX - width / 2;
+			y = Game.paddle.top - height - 10;
+			hoverOffset = 0;
+		}
+		
+		public function patrolPaddle():void 
+		{
+			FP.console.log(hoverOffset);
+			//hoverOffset += hoverVel;
+			if (hoveringRight)
+			{
+				if (hoverOffset + HOVER_SPEED * FP.elapsed > Game.paddle.width / 2 - width / 2)
+				{
+					hoverOffset = Game.paddle.width / 2 - width / 2;
+					hoveringRight = false;
+				}
+				else
+					hoverOffset += HOVER_SPEED * FP.elapsed;
+			}
+			else
+			{
+				if (hoverOffset - HOVER_SPEED * FP.elapsed < -Game.paddle.width / 2 + width / 2)
+				{
+					hoverOffset = -Game.paddle.width / 2 + width / 2;
+					hoveringRight = true;
+				}
+				else
+					hoverOffset -= HOVER_SPEED * FP.elapsed;
+			}
+			
+			x = Game.paddle.centerX - width / 2 + hoverOffset;
 			y = Game.paddle.top - height - 10;
 		}
 		
@@ -163,8 +188,9 @@ package
 		//fire from paddle with random upward direction}
 		public function fireFromPaddle():void 
 		{
-			velX = FP.sign(FP.random - .5) * Util.rand(MIN_AXIS_SPEED, MAX_AXIS_SPEED);
-			velY = -calcYVelocity();
+			//velX = FP.sign(FP.random - .5) * Util.rand(MIN_AXIS_SPEED, MAX_AXIS_SPEED);
+			//velY = -calcYVelocity();
+			paddleBounce();
 		}
 		
 		public function fireRandomDirection():void 

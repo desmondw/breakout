@@ -6,8 +6,8 @@ package
 	
 	public class Main extends Engine
 	{
-		public static var soundVol:Number = .7;
-		public static var musicVol:Number = .7;
+		public static var soundVol:Number = 1;
+		public static var musicVol:Number = 1;
 		public static var soundOn:Boolean = true;
 		public static var musicOn:Boolean = true;
 		

@@ -7,7 +7,7 @@ package
 	import net.flashpunk.graphics.*;
 	
 	/**
-	 * Main menu.
+	 * Full screen title menu. Seperate Flashpunk world from the game.
 	 */
 	public class Menu extends World
 	{
@@ -21,13 +21,13 @@ package
 		private const LIST_Y:int = 100;
 		
 		//menu lists that hold displayed buttons
-		private var mainList:Array = new Array();
-		private var levelsList:Array = new Array();
-		private var optionsList:Array = new Array();
+		private var _mainList:Array = new Array();
+		private var _levelsList:Array = new Array();
+		private var _optionsList:Array = new Array();
 		
-		private var fade:Fader = new Fader();		//whole screen fade effect
+		private var _fade:Fader = new Fader();		//whole screen _fade effect
 		
-		private var levels:Array = new Array("old school", "level 2", "level 3");	//names of levels
+		private var _levels:Array = new Array("old school", "level 2", "level 3");	//names of _levels
 		
 		public function Menu() 
 		{
@@ -58,68 +58,68 @@ package
 			button = new TextButton(10, 7, "breakout", 70, Resources.FONT);
 			button.adjustHitbox();
 			add(button);
-			mainList.push(button);
+			_mainList.push(button);
 			
 			//continue
 			button = new TextButton(LIST_X, LIST_Y, "play", 30, Resources.FONT);
 			button.onClick(continueBtn_onClick);
-			mainList.push(button);
+			_mainList.push(button);
 			
-			//levels
-			//button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, "levels", 30, Resources.FONT);
+			//_levels
+			//button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, "_levels", 30, Resources.FONT);
 			//button.onClick(levelsBtn_onClick);
-			//mainList.push(button);
+			//_mainList.push(button);
 			
 			//options
 			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 1, "options", 30, Resources.FONT);
 			button.onClick(optionsBtn_onClick);
-			mainList.push(button);
+			_mainList.push(button);
 			
 			//credits
 			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, "credits", 30, Resources.FONT);
 			button.onClick(creditsBtn_onClick);
-			mainList.push(button);
+			_mainList.push(button);
 			
 			//add graphics for mousing over and add to world
-			for (var i:int = 1; i < mainList.length; i++)
+			for (var i:int = 1; i < _mainList.length; i++)
 			{
-				mainList[i].onMouseOver(buttonMouseOver);
-				mainList[i].onMouseStray(buttonMouseStray);
-				mainList[i].adjustHitbox();
-				add(mainList[i]);
+				_mainList[i].onMouseOver(buttonMouseOver);
+				_mainList[i].onMouseStray(buttonMouseStray);
+				_mainList[i].adjustHitbox();
+				add(_mainList[i]);
 			}
 			
 			//}}
 			
 			//{{ LEVELS
 			//title
-			levelsList[0] = new TextButton(10, 7, "levels", 70, Resources.FONT);
-			levelsList[0].adjustHitbox();
-			add(levelsList[0]);
+			_levelsList[0] = new TextButton(10, 7, "_levels", 70, Resources.FONT);
+			_levelsList[0].adjustHitbox();
+			add(_levelsList[0]);
 			
 			//1
-			levelsList[1] = new TextButton(LIST_X, LIST_Y, levels[0], 30, Resources.FONT);
-			levelsList[1].onClick(levelList_onClick);
+			_levelsList[1] = new TextButton(LIST_X, LIST_Y, _levels[0], 30, Resources.FONT);
+			_levelsList[1].onClick(levelList_onClick);
 			
 			//2
-			levelsList[2] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, levels[1], 30, Resources.FONT);
-			levelsList[2].onClick(levelList_onClick);
+			_levelsList[2] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING, _levels[1], 30, Resources.FONT);
+			_levelsList[2].onClick(levelList_onClick);
 			
 			//3
-			levelsList[3] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, levels[2], 30, Resources.FONT);
-			levelsList[3].onClick(levelList_onClick);
+			_levelsList[3] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, _levels[2], 30, Resources.FONT);
+			_levelsList[3].onClick(levelList_onClick);
 			
 			//back
-			levelsList[4] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 3, "back", 30, Resources.FONT);
-			levelsList[4].onClick(levelList_onClick);
+			_levelsList[4] = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 3, "back", 30, Resources.FONT);
+			_levelsList[4].onClick(levelList_onClick);
 			
 			//add graphics for mousing over and add to world
-			for (var i:int = 1; i < levelsList.length; i++)
+			for (var i:int = 1; i < _levelsList.length; i++)
 			{
-				levelsList[i].onMouseOver(buttonMouseOver);
-				levelsList[i].onMouseStray(buttonMouseStray);
-				levelsList[i].adjustHitbox();
-				add(levelsList[i]);
+				_levelsList[i].onMouseOver(buttonMouseOver);
+				_levelsList[i].onMouseStray(buttonMouseStray);
+				_levelsList[i].adjustHitbox();
+				add(_levelsList[i]);
 			}
 			//}}
 			
@@ -129,7 +129,7 @@ package
 			button = new TextButton(10, 7, "options", 70, Resources.FONT);
 			button.adjustHitbox();
 			add(button);
-			optionsList.push(button);
+			_optionsList.push(button);
 			
 			//sound
 			if (Main.soundOn)
@@ -137,7 +137,7 @@ package
 			else
 				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 0, "sound: off", 30, Resources.FONT);
 			button.onClick(soundBtn_onClick);
-			optionsList.push(button);
+			_optionsList.push(button);
 			
 			//music
 			if (Main.musicOn)
@@ -145,20 +145,20 @@ package
 			else
 				button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 1, "music: off", 30, Resources.FONT);
 			button.onClick(musicBtn_onClick);
-			optionsList.push(button);
+			_optionsList.push(button);
 			
 			//back
 			button = new TextButton(LIST_X, LIST_Y + BUTTON_SPACING * 2, "back", 30, Resources.FONT);
 			button.onClick(backBtn_onClick);
-			optionsList.push(button);
+			_optionsList.push(button);
 			
 			//add graphics for mousing over and add to world
-			for (var i:int = 1; i < optionsList.length; i++)
+			for (var i:int = 1; i < _optionsList.length; i++)
 			{
-				optionsList[i].onMouseOver(buttonMouseOver);
-				optionsList[i].onMouseStray(buttonMouseStray);
-				optionsList[i].adjustHitbox();
-				add(optionsList[i]);
+				_optionsList[i].onMouseOver(buttonMouseOver);
+				_optionsList[i].onMouseStray(buttonMouseStray);
+				_optionsList[i].adjustHitbox();
+				add(_optionsList[i]);
 			}
 			//}}
 			
@@ -166,9 +166,9 @@ package
 			
 			showList("main"); //display main list and hide others
 			
-			//fade into screen at start
-			fade.fadeIn(2);
-			add(fade);
+			//_fade into screen at start
+			_fade.fadeIn(2);
+			add(_fade);
 		}
 		
 		override public function update():void
@@ -192,7 +192,7 @@ package
 		private function showList(list:String):void 
 		{
 			//enable/disable main menu buttons
-			for each (var button:Button in mainList)
+			for each (var button:Button in _mainList)
 			{
 				if (list == "main")
 				{
@@ -208,9 +208,9 @@ package
 			}
 			
 			//enable/disable level menu buttons
-			for each (var button:Button in levelsList)
+			for each (var button:Button in _levelsList)
 			{
-				if (list == "levels")
+				if (list == "_levels")
 				{
 					button.visible = true;
 					button.interactable = true;
@@ -224,7 +224,7 @@ package
 			}
 			
 			//enable/disable credit menu buttons
-			for each (var button:Button in optionsList)
+			for each (var button:Button in _optionsList)
 			{
 				if (list == "options")
 				{
@@ -248,16 +248,16 @@ package
 		 */
 		private function continueBtn_onClick(button:TextButton):void 
 		{
-			fade.fadeOut(.5, newGame);
+			_fade.fadeOut(.5, newGame);
 		}
 		
 		/**
-		 * Displays the levels menu.
+		 * Displays the _levels menu.
 		 * @param	button		Button that triggered the event.
 		 */
 		private function levelsBtn_onClick(button:TextButton):void 
 		{
-			showList("levels");
+			showList("_levels");
 		}
 		
 		/**
@@ -286,15 +286,15 @@ package
 		{
 			switch (button.text)
 			{
-				case levels[0]:
+				case _levels[0]:
 					//newGame();
 				break;
 				
-				case levels[1]:
+				case _levels[1]:
 					//newGame();
 				break;
 				
-				case levels[2]:
+				case _levels[2]:
 					//newGame();
 				break;
 				

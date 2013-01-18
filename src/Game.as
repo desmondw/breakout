@@ -8,6 +8,9 @@ package
 	import net.flashpunk.utils.*;
 	import net.flashpunk.graphics.*;
 
+	/**
+	 * Encapsulates top-level game elements.
+	 */
 	public class Game extends World
 	{
 		public static var paused:Boolean;			//tracks when the gameplay is paused
@@ -17,10 +20,10 @@ package
 		public var interfaceLayer:InterfaceLayer;
 		
 		//menus
-		private var _pauseMenu:PauseMenu = new PauseMenu();
+		private var _pauseMenu:PauseMenu;
 		
 		//fading effect
-		private var _fade:Fader = new Fader();
+		public var fade:Fader = new Fader();
 		
 		public function Game() 
 		{
@@ -34,12 +37,16 @@ package
 		{
 			paused = false;
 			
+			//layers
 			gameplayLayer = new GameplayLayer(this);
 			interfaceLayer = new InterfaceLayer(this);
 			
+			//menus
+			_pauseMenu = new PauseMenu(this);
+			
 			//fading effect
-			_fade.fadeIn(2);
-			add(_fade);
+			fade.fadeIn(2);
+			add(fade);
 			
 			//define input
 			Input.define("pause", Key.ESCAPE, Key.P);

@@ -17,7 +17,8 @@ package
 		public function Main()
 		{
 			super(SCREEN_WIDTH, SCREEN_HEIGHT, 60, false);
-			FP.world = new Menu();
+			Registry.menu = new Menu();
+			FP.world = Registry.menu;
 		}
 
 		override public function init():void

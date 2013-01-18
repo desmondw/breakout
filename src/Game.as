@@ -1,6 +1,10 @@
 package  
 {
 	import gui.*;
+	import entities.*;
+	import layers.*;
+	import layers.menus.PauseMenu;
+	
 	import net.flashpunk.*;
 	import net.flashpunk.utils.*;
 	import net.flashpunk.graphics.*;
@@ -17,7 +21,7 @@ package
 		private var oldMouseY:Number;
 		
 		//entities
-		public static var paddle:Paddle;
+		public var paddle:Paddle;
 		public static var ball:Ball;
 		private var pauseMenu:PauseMenu = new PauseMenu();
 		
@@ -33,7 +37,8 @@ package
 		private var bg2:Entity;
 		private var bgOrigin:int;
 		
-		private var lives:Array = new Array();
+		private var lives:Array;
+		
 		private var soundBtn:Button;
 		private var musicBtn:Button;
 		private var pauseBtn:Button;
@@ -44,9 +49,15 @@ package
 		
 		public function Game() 
 		{
+			
+		}
+		
+		override public function begin():void 
+		{
 			//{ INITIALIZATION
 			//variables
 			paused = false;
+			lives = new Array();
 			
 			//entities
 			paddle = new Paddle();
@@ -189,10 +200,6 @@ package
 		
 		private function handleInput():void 
 		{
-			//back out to menu
-			//if (Input.pressed(Key.ESCAPE))
-				//FP.world = new Menu();
-				
 			//pause
 			if (Input.pressed("pause"))
 			{
@@ -265,12 +272,14 @@ package
 		
 		private function gameOver():void 
 		{
-			FP.world = new Menu();
+			Registry.menu = new Menu();
+			FP.world = Registry.menu
 		}
 		
 		private function win():void 
 		{
-			FP.world = new Menu();
+			Registry.menu = new Menu();
+			FP.world = Registry.menu
 		}
 		
 		//{ event handling

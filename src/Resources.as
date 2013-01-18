@@ -1,6 +1,8 @@
 package  
 {
-
+	/**
+	 * Contains embedded resources for use in the project.
+	 */
 	public class Resources 
 	{
 		//font

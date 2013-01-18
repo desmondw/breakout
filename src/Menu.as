@@ -1,51 +1,56 @@
 package  
 {
-	import flash.events.Event;
-	import flash.utils.Dictionary;
 	import gui.*;
+	
 	import net.flashpunk.*;
 	import net.flashpunk.utils.*;
 	import net.flashpunk.graphics.*;
 	
+	/**
+	 * Main menu.
+	 */
 	public class Menu extends World
 	{
-		private const BUTTON_SIZE:int = 30;
-		private const BUTTON_SIZE_SELECTED:int = 45;
-		private const BUTTON_SPACING:int = 7 + BUTTON_SIZE;
+		//button size and positioning
+		private const BUTTON_SIZE:int = 30;						//size of button text normally
+		private const BUTTON_SIZE_SELECTED:int = 45;			//size of button text when selected
+		private const BUTTON_SPACING:int = 7 + BUTTON_SIZE;		//space between buttons
 		
+		//location of menu lists
 		private const LIST_X:int = 40;
 		private const LIST_Y:int = 100;
 		
-		private var fade:Fader = new Fader();
-		
+		//menu lists that hold displayed buttons
 		private var mainList:Array = new Array();
 		private var levelsList:Array = new Array();
 		private var optionsList:Array = new Array();
 		
-		private var levels:Array;
+		private var fade:Fader = new Fader();		//whole screen fade effect
+		
+		private var levels:Array = new Array("old school", "level 2", "level 3");	//names of levels
 		
 		public function Menu() 
 		{
-			//levels
-			levels = new Array(
-					"old school",
-					"level 2",
-					"level 3"
-					);
 			
-			//{ STATIC
+		}
+		
+		override public function begin():void 
+		{
+			//{ CONSTANT GRAPHICS
+			
 			//background
-			var bgImg:Image = new Image(Resources.MENU_BG);
-			var bg:Entity = new Entity(0, 0, bgImg);
+			var bg:Entity = new Entity(0, 0, new Image(Resources.MENU_BG));
 			add(bg);
 			
 			//seperator
-			var seperatorImg:Image = new Image(Resources.MAIN_MENU_SEPERATOR);
-			var seperator:Entity = new Entity(0, 80, seperatorImg);
+			var seperator:Entity = new Entity(0, 80, new Image(Resources.MAIN_MENU_SEPERATOR));
 			add(seperator);
+			
 			//}
 			
-			//{ MAIN
+			//{ MENU LISTS
+			
+			//{{ MAIN
 			
 			var button:TextButton;
 			
@@ -84,9 +89,9 @@ package
 				add(mainList[i]);
 			}
 			
-			//}
+			//}}
 			
-			//{ LEVELS
+			//{{ LEVELS
 			//title
 			levelsList[0] = new TextButton(10, 7, "levels", 70, Resources.FONT);
 			levelsList[0].adjustHitbox();
@@ -116,9 +121,9 @@ package
 				levelsList[i].adjustHitbox();
 				add(levelsList[i]);
 			}
-			//}
+			//}}
 			
-			//{ OPTIONS
+			//{{ OPTIONS
 			
 			//title
 			button = new TextButton(10, 7, "options", 70, Resources.FONT);
@@ -155,11 +160,13 @@ package
 				optionsList[i].adjustHitbox();
 				add(optionsList[i]);
 			}
+			//}}
+			
 			//}
 			
-			showList("main"); //display main list first
+			showList("main"); //display main list and hide others
 			
-			//fade in to menu screen
+			//fade into screen at start
 			fade.fadeIn(2);
 			add(fade);
 		}
@@ -167,41 +174,24 @@ package
 		override public function update():void
 		{
 			super.update();
-			
-			if (Input.pressed(Key.SPACE))
-				newGame();
 		}
 		
-		//old graphic scene
-		private function fireRandomBalls():void 
-		{
-			var balls:Array = new Array();
-			for (var i:int = 0; i < 10; i++)
-			{
-				var ball:Ball = new Ball(FP.halfWidth, FP.halfHeight);
-				ball.fireRandomDirection();
-				ball.bounceOffBottom = true;
-				add(ball);
-				balls.push(ball);
-			}
-		}
-		
+		/**
+		 * Starts a new game.
+		 */
 		private function newGame():void 
 		{
-			 FP.world = new Game();
+			Registry.game = new Game();
+			FP.world = Registry.game;
 		}
 		
-		//alter text boxes to have appropriate hitboxes
-		//private function adjustHitbox(button:Button):void 
-		//{
-			//button.graphic.y -= button.height * (1 - .8) / 2;
-			//button.width *= .84;
-			//button.height *= .78;
-		//}
-		
-		//changes visible list
+		/**
+		 * Changes the active menu as specified.
+		 * @param	list		Name of menu to make active.
+		 */
 		private function showList(list:String):void 
 		{
+			//enable/disable main menu buttons
 			for each (var button:Button in mainList)
 			{
 				if (list == "main")
@@ -216,6 +206,8 @@ package
 					button.interactable = false;
 				}
 			}
+			
+			//enable/disable level menu buttons
 			for each (var button:Button in levelsList)
 			{
 				if (list == "levels")
@@ -230,6 +222,8 @@ package
 					button.interactable = false;
 				}
 			}
+			
+			//enable/disable credit menu buttons
 			for each (var button:Button in optionsList)
 			{
 				if (list == "options")
@@ -246,37 +240,51 @@ package
 			}
 		}
 		
-		//go up a level in the menu
-		private function back():void 
-		{
-			showList("main");
-		}
+		//{ EVENT HANDLERS
 		
-		//{ event handlers
-		private function continueBtn_onClick(b:TextButton):void 
+		/**
+		 * Loads last level played.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function continueBtn_onClick(button:TextButton):void 
 		{
 			fade.fadeOut(.5, newGame);
 		}
 		
-		private function levelsBtn_onClick(b:TextButton):void 
+		/**
+		 * Displays the levels menu.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function levelsBtn_onClick(button:TextButton):void 
 		{
 			showList("levels");
 		}
 		
-		private function optionsBtn_onClick(b:TextButton):void 
+		/**
+		 * Displays the options menu.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function optionsBtn_onClick(button:TextButton):void 
 		{
 			showList("options");
 		}
 		
-		private function creditsBtn_onClick(b:TextButton):void 
+		/**
+		 * Displays the credits screen.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function creditsBtn_onClick(button:TextButton):void 
 		{
 			
 		}
 		
-		//any level is clicked
-		private function levelList_onClick(b:TextButton):void 
+		/**
+		 * Starts a new game of the selected level.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function levelList_onClick(button:TextButton):void 
 		{
-			switch (b.text)
+			switch (button.text)
 			{
 				case levels[0]:
 					//newGame();
@@ -291,61 +299,74 @@ package
 				break;
 				
 				case "back":
-					back();
+					showList("main");
 				break;
 			}
 		}
 		
-		private function backBtn_onClick(b:TextButton):void 
+		/**
+		 * Returns to a higher level in the menu.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function backBtn_onClick(button:TextButton):void 
 		{
-			back();
+			showList("main");
 		}
 		
-		private function soundBtn_onClick(b:TextButton):void 
+		/**
+		 * Toggles game sound.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function soundBtn_onClick(button:TextButton):void 
 		{
 			if (Main.soundOn)
-			{
-				Main.soundOn = false;
-				b.text = "sound: off";
-			}
+				button.text = "sound: off";
 			else
-			{
-				Main.soundOn = true;
-				b.text = "sound: on";
-			}
+				button.text = "sound: on";
+			
+			Main.soundOn = !Main.soundOn;
 		}
 		
-		private function musicBtn_onClick(b:TextButton):void 
+		/**
+		 * Toggles game music.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function musicBtn_onClick(button:TextButton):void 
 		{
 			if (Main.musicOn)
-			{
-				Main.musicOn = false;
-				b.text = "music: off";
-			}
+				button.text = "music: off";
 			else
-			{
-				Main.musicOn = true;
-				b.text = "music: on";
-			}
+				button.text = "music: on";
+			
+			Main.musicOn = !Main.musicOn;
 		}
 		
-		//any button is moused over
-		private function buttonMouseOver(b:TextButton):void 
+		/**
+		 * Increases text size of button.
+		 * Fires when any button is moused over.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function buttonMouseOver(button:TextButton):void 
 		{
-			var oldCenterY:int = b.centerY;
-			b.setTextSize(BUTTON_SIZE_SELECTED);
-			b.adjustHitbox();
-			b.y += oldCenterY - b.centerY;
+			var oldCenterY:int = button.centerY;
+			button.size = BUTTON_SIZE_SELECTED;
+			button.adjustHitbox();
+			button.y += oldCenterY - button.centerY;
 		}
 		
-		//any button when cursor leaves
-		private function buttonMouseStray(b:TextButton):void 
+		/**
+		 * Decreases text size of button.
+		 * Fires when the mouse leaves the hitbox of any button.
+		 * @param	button		Button that triggered the event.
+		 */
+		private function buttonMouseStray(button:TextButton):void 
 		{
-			var oldCenterY:int = b.centerY;
-			b.setTextSize(BUTTON_SIZE);
-			b.adjustHitbox();
-			b.y += oldCenterY - b.centerY;
+			var oldCenterY:int = button.centerY;
+			button.size = BUTTON_SIZE;
+			button.adjustHitbox();
+			button.y += oldCenterY - button.centerY;
 		}
+		
 		//}
 	}
 }

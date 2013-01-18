@@ -17,14 +17,15 @@ package
 		public function Main()
 		{
 			super(SCREEN_WIDTH, SCREEN_HEIGHT, 60, false);
+			
 			Registry.menu = new Menu();
 			FP.world = Registry.menu;
 		}
 
 		override public function init():void
 		{
-			//FP.console.enable();
 			FP.screen.color = 0x7777FF;
+			//FP.console.enable();
 		}
 	}
 }
